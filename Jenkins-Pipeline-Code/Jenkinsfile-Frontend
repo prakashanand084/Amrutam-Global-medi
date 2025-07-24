@@ -1,0 +1,65 @@
+pipeline {
+    agent any 
+
+    environment {
+        AWS_ACCOUNT_ID = credentials('ACCOUNT_ID')
+        AWS_ECR_REPO_NAME = credentials('ECR_REPO1')
+        AWS_DEFAULT_REGION = 'us-east-1'
+        REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/"
+        GIT_REPO_NAME = "3t-project"
+        GIT_USER_NAME = "prakashanand084"
+    }
+
+    stages {
+        stage('Cleaning Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+
+        stage('Checkout from Git') {
+            steps {
+                git branch: 'main', url: "https://github.com/${GIT_USER_NAME}/${GIT_REPO_NAME}.git"
+            }
+        }
+
+        stage("Docker Image Build") {
+            steps {
+                dir('frontend') {
+                    sh '''
+                        docker system prune -f
+                        docker container prune -f
+                    '''
+                    sh "docker build -t ${AWS_ECR_REPO_NAME} ."
+                }
+            }
+        }
+
+        stage("ECR Image Pushing") {
+            steps {
+                sh """
+                    aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${REPOSITORY_URI}
+                    docker tag ${AWS_ECR_REPO_NAME} ${REPOSITORY_URI}${AWS_ECR_REPO_NAME}:${BUILD_NUMBER}
+                    docker push ${REPOSITORY_URI}${AWS_ECR_REPO_NAME}:${BUILD_NUMBER}
+                """
+            }
+        }
+
+        stage('Update Deployment file') {
+            steps {
+                dir('kubernetes-files') {
+                    withCredentials([string(credentialsId: 'my-git-pattoken', variable: 'git_token')]) {
+                        sh """
+                            git config user.email "prkshanand084@gmail.com"
+                            git config user.name "prakashanand084"
+                            sed -i "s#image:.*#image: ${REPOSITORY_URI}${AWS_ECR_REPO_NAME}:${BUILD_NUMBER}#g" frontend-deploy-service.yaml
+                            git add .
+                            git commit -m "Update deployment Image to version ${BUILD_NUMBER}"
+                            git push https://${git_token}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME}.git HEAD:main
+                        """
+                    }
+                }
+            }
+        }
+    } 
+}
