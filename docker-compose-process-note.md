@@ -17,13 +17,13 @@ docker-compose version
 ``` 
 -- after above process clone the repo by follwing command
 ```sh   
-git clone https://github.com/CloudTechDevOps/2nd10WeeksofCloudOps-main.git
+git clone https://github.com/prakashanand084/Amrutam-Global-medi.git
 ```  
 -- switch to repo 
 ```sh    
-cd 2nd10WeeksofCloudOps-main
+cd Amrutam-Global-medi
 ```  
--- edit the config.js file in follwing path vi clinet/src/pages/config.js
+-- edit the config.js file in follwing path vi frontend/src/pages/config.js
 ```javascript
 // const API_BASE_URL = "http://25.41.26.237:84"; // on live backend server which is running on port 84
 const API_BASE_URL = "http://publicip:portNumber";
@@ -48,7 +48,7 @@ sudo yum install mariadb105-server -y
 --after that chaange into you project backend dirictroy then run the follwing command 
 ```sh    
 mysql -h <rds-end-point> -u admin -p<passowrd> < test.sql
-mysql -h book-rds.c1u4kewc6r37.ap-south-1.rds.amazonaws.com -u admin -pveeranarni < test.sql   ## example command chamge the values
+mysql -h book-rds.c1u4kewc6r37.ap-south-1.rds.amazonaws.com -u admin -pCloud123 < test.sql   ## example command chamge the values
 ```    
 -- then search the public-ip:84 port in broswer you will get the appliaction deployment then add the book
     --------------------------THANKYOU------------------------------------------------------------
