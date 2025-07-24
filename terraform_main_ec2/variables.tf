@@ -58,11 +58,11 @@ variable "instance_type" {
   default     = "t2.medium"
 }
 
-# variable "key_name" {
-#   description = "EC2 keypair"
-#   type        = string
-#   default     = "us-east-1"
-# }
+ variable "key_name" {
+   description = "EC2 keypair"
+   type        = string
+   default     = "love"
+ }
 
 variable "instance_name" {
   description = "EC2 Instance name for the amrutam server"
