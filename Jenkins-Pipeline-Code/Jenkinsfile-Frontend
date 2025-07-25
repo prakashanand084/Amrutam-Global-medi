@@ -6,7 +6,7 @@ pipeline {
         AWS_ECR_REPO_NAME = credentials('ECR_REPO1')
         AWS_DEFAULT_REGION = 'us-east-1'
         REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/"
-        GIT_REPO_NAME = "3t-project"
+        GIT_REPO_NAME = "Amrutam-Global-medi"
         GIT_USER_NAME = "prakashanand084"
     }
 
