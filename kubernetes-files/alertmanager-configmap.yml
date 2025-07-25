@@ -2,11 +2,11 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: alertmanager-config
-  namespace: monitoring   # 👈 Make sure this matches your Alertmanager namespace
+  namespace: monitoring   #  Make sure this matches your Alertmanager namespace
 labels:
   app: alertmanager
 data:
-  alertmanager.yaml: |     # 👈 This is the key expected by Alertmanager
+  alertmanager.yaml: |     #  This is the key expected by Alertmanager
     global:
       resolve_timeout: 5m
 
@@ -20,4 +20,4 @@ data:
       - channel: '#alerts'
         send_resolved: true
         username: 'alertmanager'
-        api_url: 'https://hooks.slack.com/services/TOKEN/PATH/HERE'  # 👈 Replace with your Slack webhook
+        api_url: 'https://hooks.slack.com/services/TOKEN/PATH/HERE'  # Replace with your Slack webhook
